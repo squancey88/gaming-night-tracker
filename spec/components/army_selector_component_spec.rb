@@ -4,8 +4,6 @@ require "rails_helper"
 
 RSpec.describe ArmySelectorComponent, type: :helper do
   include ViewComponent::TestHelpers
-  include ViewComponent::SystemTestHelpers
-  include Capybara::RSpecMatchers
 
   let(:game_system) { create(:wargame) }
   let(:user) { create(:user) }

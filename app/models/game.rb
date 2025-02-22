@@ -4,12 +4,16 @@ class Game < ApplicationRecord
   belongs_to :campaign, dependent: nil, optional: true
 
   has_many :players, dependent: :destroy
+  has_many :unit_xp_gain_applied, dependent: :destroy
+  has_many :unit_applied_modifier, dependent: :destroy
 
   enum game_state: {not_played: 0, in_progress: 3, finished: 2, cancelled: 1}
 
   validates :players, presence: true
 
   accepts_nested_attributes_for :players
+  accepts_nested_attributes_for :unit_xp_gain_applied
+  accepts_nested_attributes_for :unit_applied_modifier
 
   before_create(:setup_data)
   after_save(:check_finished)

@@ -1,61 +1,81 @@
 <div data-controller="game-form">
   <%= form_with model: @game do |form| %>
+    <%= render RecordShowWrapperComponent.new(
+      record: @game,
+      title: @game.game_system.name,
+      menu_options: [
+        {
+          text: "Delete",
+          link: game_path(@game),
+          data: {turbo_method: :delete, turbo_confirm: "Are you sure?"}
+        }
+      ]
+    ) do |component| %>
+  
+      <% @game_system.game_data_form_components(@game).each do |form_component| %>
+        <% component.with_box(title: form_component[:title], height_limited: false) do%>
+          <%= render form_component[:component].new(game: @game, form:, user_player: @current_user_player) %>
+        <% end %>
+      <% end %>
 
-    <%= render @game_system.game_data_form_component(@game) if @game_system.game_data_form_component(@game) %>
-
-    <% if @current_user_player %>
-      <div class="form-control__player-section mb-3">
-        <%= form.fields_for :players, @current_user_player, child_index: @player_index do |player_form| %>
-          <%= player_form.hidden_field :id %>
-          <div class="accordion" id="playerData">
-            <% @game_system.player_form_components.each_with_index do |player_component, component_index| %>
-              <div class="accordion-item">
-                <h2 class="accordion-header">
-                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#playerComponent-<%= component_index %>" aria-expanded="true" aria-controls="collapseOne">
-                    <%= player_component[:title] %>
-                  </button>
-                </h2>
-                <div id="playerComponent-<%= component_index %>" class="accordion-collapse collapse" data-bs-parent="#playerData">
-                  <div class="accordion-body">
-                    <%= render player_component[:component].new(game: @game, player_form: player_form, current_player: @current_user_player, player_index: @player_index) %>
+      <%= component.with_box(title: "Your Details") do %>
+        <% if @current_user_player %>
+          <div class="form-control__player-section mb-3">
+            <%= form.fields_for :players, @current_user_player, child_index: @player_index do |player_form| %>
+              <%= player_form.hidden_field :id %>
+              <div class="accordion" id="playerData">
+                <% @game_system.player_form_components.each_with_index do |player_component, component_index| %>
+                  <div class="accordion-item">
+                    <h2 class="accordion-header">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#playerComponent-<%= component_index %>" aria-expanded="true" aria-controls="collapseOne">
+                        <%= player_component[:title] %>
+                      </button>
+                    </h2>
+                    <div id="playerComponent-<%= component_index %>" class="accordion-collapse collapse" data-bs-parent="#playerData">
+                      <div class="accordion-body">
+                        <%= render player_component[:component].new(game: @game, player_form: player_form, current_player: @current_user_player, player_index: @player_index) %>
+                      </div>
+                    </div>
                   </div>
-                </div>
+                <% end %>
               </div>
             <% end %>
           </div>
         <% end %>
-      </div>
-    <% end %>
-
-    <div class="form-control__finish_section">
-
-      <%= state_select(form) %>
-
-      <% if @game.game_system.finish_reasons %>
-        <%= finish_reason_select(@game.game_system, form, :finish_reason, classes: ["mb-3"], 
-              disabled: @game.editable?,
-              data: {
-                action: "game-form#finishChosen"
-              }) %>
       <% end %>
 
-      <div class="<%= class_names("surrender-selection", "mb-3", "surrender-selection--show": @game.finish_reason == "Player Surrender") %>" data-game-form-target="surrenderSection">
-        <p>Who surrender?</p>
-        <div class="surrender-selection__players">
-        <% @game.players.each_with_index do |player, index| %>
-          <%= form.fields_for :players, player, child_index: index do |player_form| %>
-            <div class="form-check">
-              <%= player_form.label(:surrendered, player.display_name, class: "form-check-label") %>
-              <%= player_form.check_box(:surrendered, class: "form-check-input", data: {
-                "game-form-target": "surrenderCheckBox"
-              }) %>
-            </div>
+      <%= component.with_box(title: "Game Details") do %>
+        <div class="form-control__finish_section">
+
+          <%= state_select(form) %>
+
+          <% if @game.game_system.finish_reasons %>
+            <%= finish_reason_select(@game.game_system, form, :finish_reason, classes: ["mb-3"], 
+                  disabled: @game.editable?,
+                  data: {
+                    action: "game-form#finishChosen"
+                  }) %>
           <% end %>
-        <% end %>
-      </div>
 
-    </div>
+          <div class="<%= class_names("surrender-selection", "mb-3", "surrender-selection--show": @game.finish_reason == "Player Surrender") %>" data-game-form-target="surrenderSection">
+            <p>Who surrender?</p>
+            <div class="surrender-selection__players">
+            <% @game.players.each_with_index do |player, index| %>
+              <%= form.fields_for :players, player, child_index: index do |player_form| %>
+                <div class="form-check">
+                  <%= player_form.label(:surrendered, player.display_name, class: "form-check-label") %>
+                  <%= player_form.check_box(:surrendered, class: "form-check-input", data: {
+                    "game-form-target": "surrenderCheckBox"
+                  }) %>
+                </div>
+              <% end %>
+            <% end %>
+          </div>
 
-    <%= form.submit class: "btn btn-primary" %>
+        </div>
+
+        <%= form.submit class: "btn btn-primary" %>
+      <% end %>
+    <% end %>
   <% end %>
 </div>

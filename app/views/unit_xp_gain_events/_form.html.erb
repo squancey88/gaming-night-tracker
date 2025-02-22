@@ -1,0 +1,18 @@
+<%= form_with(model: unit_xp_gain_event) do |form| %>
+
+  <%= render RecordFormWrapperComponent.new(record: unit_xp_gain_event, form:) do |component| %>
+
+    <% component.with_form_box(title: "Details") do %>
+
+      <%= bootstrap_text_field(form, :name) %>
+      <%= bootstrap_number_field(form, :xp_gain) %>
+      <%= bootstrap_check_box(form, :active) %>
+      <%= form.hidden_field :game_system_id %>
+            
+    <% end %>
+    <% component.with_form_box(title: "Description") do %>
+
+      <%= render TextEditorComponent.new(form:, attribute: :description) %>
+    <% end %>
+  <% end %>
+<% end %>

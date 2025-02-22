@@ -4,15 +4,24 @@ class Unit < ApplicationRecord
   has_many :unit_applied_modifiers, dependent: :destroy
   has_many :unit_trait_mappings, dependent: :destroy
   has_many :unit_traits, through: :unit_trait_mappings
+  has_many :unit_trait_category_mappings, dependent: :destroy, foreign_key: :mapped_to_id,
+    inverse_of: :mapped_to
 
   validates :name, presence: true
   before_create :enough_cost_in_list
 
   accepts_nested_attributes_for :unit_stats, allow_destroy: true
   accepts_nested_attributes_for :unit_trait_mappings, allow_destroy: true
+  accepts_nested_attributes_for :unit_trait_category_mappings, allow_destroy: true
+
+  delegate :game_system, to: :army_list
 
   def total_cost
     cost
+  end
+
+  def current_xp
+    starting_xp
   end
 
   def enough_cost_in_list
@@ -36,4 +45,6 @@ class Unit < ApplicationRecord
     end
     unit
   end
+
+  def to_s = name
 end

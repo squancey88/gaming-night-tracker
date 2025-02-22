@@ -1,10 +1,9 @@
 class UnitTraitsController < ApplicationController
-  before_action :set_game_system, only: %i[new index]
+  include GameSystemPart
   before_action :set_unit_trait, only: %i[show edit update destroy]
 
   # GET /unit_traits or /unit_traits.json
   def index
-    @pagy, @unit_traits = pagy(@game_system.unit_traits)
   end
 
   # GET /unit_traits/1 or /unit_traits/1.json
@@ -13,7 +12,7 @@ class UnitTraitsController < ApplicationController
 
   # GET /unit_traits/new
   def new
-    @unit_trait = UnitTrait.new(game_system: @game_system, active: true)
+    @unit_trait.active = true
   end
 
   # GET /unit_traits/1/edit
@@ -60,10 +59,6 @@ class UnitTraitsController < ApplicationController
 
   private
 
-  def set_game_system
-    @game_system = GameSystem.find(params[:game_system_id])
-  end
-
   # Use callbacks to share common setup or constraints between actions.
   def set_unit_trait
     @unit_trait = UnitTrait.find(params[:id])
@@ -71,6 +66,7 @@ class UnitTraitsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def unit_trait_params
-    params.require(:unit_trait).permit(:name, :description, :game_system_id, :army_id, :active, :rich_description)
+    params.require(:unit_trait).permit(:name, :description, :game_system_id, :army_id, :active, :rich_description,
+      unit_trait_category_mappings_attributes: [:unit_trait_category_id, :order, :_destroy, :id])
   end
 end

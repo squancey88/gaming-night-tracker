@@ -1,0 +1,35 @@
+<%= render RecordShowWrapperComponent.new(
+  record: @unit_xp_gain_event,
+  title: @unit_xp_gain_event.to_s,
+  menu_options: [
+    { 
+      text: "Edit",
+      link: edit_unit_xp_gain_event_path(@unit_xp_gain_event)
+    },
+    {
+      text: "Delete",
+      link: unit_xp_gain_event_path(@unit_xp_gain_event),
+      data: {turbo_event: :delete, turbo_confirm: "Are you sure?"}
+    }
+  ]
+) do |component| %>
+
+  <% component.with_box(title: "Details") do %>
+    <p>
+      <strong>Name:</strong>
+      <%= @unit_xp_gain_event.name %>
+    </p>
+    <p>
+      <strong>Xp gain:</strong>
+      <%= @unit_xp_gain_event.xp_gain %>
+    </p>
+    <p>
+      <strong>Active:</strong>
+      <%= @unit_xp_gain_event.active %>
+    </p>
+
+  <% end %>
+  <% component.with_box(title: "Description") do %>
+    <%= render TextEditorRenderComponent.new(model: @unit_xp_gain_event, attribute: :description) %>
+  <% end %>
+<% end %>

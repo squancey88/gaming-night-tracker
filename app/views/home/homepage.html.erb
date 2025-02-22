@@ -3,4 +3,6 @@
 
 <h1>Your Groups</h1>
 
-<%= render GamingGroupCardComponent.with_collection(current_user.gaming_groups) %>
+<div class="<%= grid_classes(4) %>">
+  <%= render GamingGroupCardComponent.with_collection(current_user.gaming_groups) %>
+</div>

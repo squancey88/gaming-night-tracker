@@ -1,27 +1,21 @@
-<div class="container">
-  <div class="row">
-    <div class="col">
-      <%= render RecordShowWrapperComponent.new(
-        record: @unit_trait,
-        title: @unit_trait.to_s,
-        menu_options: [
-          { 
-            text: "Edit",
-            link: edit_unit_trait_path(@unit_trait)
-          },
-          {
-            text: "Delete",
-            link: unit_trait_path(@unit_trait),
-            data: {turbo_method: :delete, turbo_confirm: "Are you sure?"}
-          }
-        ]
-      ) do |component| %>
+<%= render RecordShowWrapperComponent.new(
+  record: @unit_trait,
+  title: @unit_trait.to_s,
+  menu_options: [
+    { 
+      text: "Edit",
+      link: edit_unit_trait_path(@unit_trait)
+    },
+    {
+      text: "Delete",
+      link: unit_trait_path(@unit_trait),
+      data: {turbo_method: :delete, turbo_confirm: "Are you sure?"}
+    }
+  ]
+) do |component| %>
 
-        <% component.with_body do %>
+  <% component.with_box(title: "Details") do %>
 
-          <%= render @unit_trait %>
-        <% end %>
-      <% end %>
-    </div>
-  </div>
-</div>
+    <%= render @unit_trait %>
+  <% end %>
+<% end %>

@@ -23,7 +23,7 @@ module WithinWorld
   end
 
   def set_records
-    records = @world.send(controller_name)
+    @pagy, records = pagy(@world.send(controller_name))
     instance_variable_set(:"@#{controller_name}", records)
   end
 end

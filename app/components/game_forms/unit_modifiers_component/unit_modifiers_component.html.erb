@@ -1,0 +1,34 @@
+
+<h3>XP gains</h3>
+<%= helpers.turbo_frame_tag :xp_gain_applied_row  do %>
+  <%= @form.fields_for :unit_xp_gain_applied do |xp_form| %>
+    <%= render partial: "unit_xp_gain_applied/form_row", locals: {
+      form: xp_form, 
+      game_system: @game.game_system,
+      user_player: @user_player,
+      game: @game
+    } %>
+  <% end %>
+<% end %>
+
+<%= link_to "Add XP Gain", 
+  add_xp_gain_applied_row_game_path(@game),
+  class: ['btn', 'btn-secondary'],
+  data: {turbo_frame: :xp_gain_applied_row, turbo_stream: true} %>
+
+<h3>Modifiers Gained</h3>
+<%= helpers.turbo_frame_tag :unit_applied_modifier_row  do %>
+  <%= @form.fields_for :unit_applied_modifier do |mod_form| %>
+    <%= render partial: "unit_applied_modifier/form_row", locals: {
+      form: mod_form, 
+      game_system: @game.game_system,
+      user_player: @user_player,
+      game: @game
+    } %>
+  <% end %>
+<% end %>
+
+<%= link_to "Add Modifier", 
+  add_unit_applied_modifier_row_game_path(@game),
+  class: ['btn', 'btn-secondary'],
+  data: {turbo_frame: :unit_applied_modifier_row, turbo_stream: true} %>

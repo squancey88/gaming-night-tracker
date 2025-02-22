@@ -28,4 +28,10 @@ module ApplicationHelper
       ]
     }.to_json
   end
+
+  def bootstrap_precedence_select(form, attribute)
+    bootstrap_field_wrapper(form, attribute,
+      form.select(attribute, options_for_select(Precedence.map.map { |k, v| [v.titlecase, k] }),
+        {include_blank: "Please Select"}, {class: "form-select"}))
+  end
 end

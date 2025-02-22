@@ -2,13 +2,17 @@
 
   <%= render RecordFormWrapperComponent.new(record: unit_trait, form:) do |component| %>
 
-    <% component.with_form_box do %>
+    <% component.with_form_box(title: "Details") do %>
 
       <%= form.hidden_field :game_system_id %>
       <%= bootstrap_text_form(form, :name) %>
       <%= bootstrap_check_box(form, :active) %>
+
+      <%= render partial: "unit_trait_category_mappings/form_embed", locals: { record: unit_trait, form: } %>
+    <% end %>
+
+    <% component.with_form_box(title: "Description") do %>
       <%= render TextEditorComponent.new(form:, attribute: :rich_description) %>
-      
     <% end %>
   <% end %>
 <% end %>

@@ -38,6 +38,7 @@
         class: ['btn', 'btn-secondary'],
         data: {turbo_frame: :trait_mappings, turbo_stream: true} %>
 
+      <%= render partial: "unit_trait_category_mappings/form_embed", locals: { record: unit_template, form: } %>
     <% end %>
   <% end %>
 <% end %>

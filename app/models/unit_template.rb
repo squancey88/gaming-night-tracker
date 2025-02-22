@@ -5,9 +5,12 @@ class UnitTemplate < ApplicationRecord
   has_many :unit_template_stats, dependent: :destroy
   has_many :unit_template_trait_mappings, dependent: :destroy
   has_many :unit_traits, through: :unit_template_trait_mappings
+  has_many :unit_trait_category_mappings, dependent: :destroy, foreign_key: :mapped_to_id,
+    inverse_of: :mapped_to
 
   accepts_nested_attributes_for :unit_template_stats
   accepts_nested_attributes_for :unit_template_trait_mappings, allow_destroy: true
+  accepts_nested_attributes_for :unit_trait_category_mappings, allow_destroy: true
 
   validates :name, presence: true
 
@@ -31,4 +34,6 @@ class UnitTemplate < ApplicationRecord
     end
     unit
   end
+
+  def to_s = name
 end

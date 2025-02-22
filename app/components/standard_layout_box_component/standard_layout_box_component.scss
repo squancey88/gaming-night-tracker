@@ -15,4 +15,17 @@
       align-items: flex-start;
     }
   }
+
+  &_content {
+    max-height: 400px;
+    overflow-y: scroll;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Hide scrollbar for IE, Edge and Firefox */
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
 }

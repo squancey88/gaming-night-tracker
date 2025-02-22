@@ -1,25 +1,3 @@
 <%= link_to "Back to session", gaming_group_gaming_session_path(@game.gaming_session.gaming_group, @game.gaming_session) %>
 
-<%= render RecordShowWrapperComponent.new(
-  record: @game,
-  title: @game.game_system.name,
-  menu_options: [
-    { 
-      text: "Edit",
-      link: edit_game_path(@game)
-    },
-    {
-      text: "Delete",
-      link: game_path(@game),
-      data: {turbo_method: :delete, turbo_confirm: "Are you sure?"}
-    }
-  ]
-) do |component| %>
-
-  <% component.with_box do %>
-
-    <%= render @game %>
-
-    <%= render GameFormComponent.new(game: @game) %>
-  <% end %>
-<% end %>
+<%= render GameFormComponent.new(game: @game) %>

@@ -1,7 +1,9 @@
-<div class="card" style="width: 18rem;">
-  <%= image_tag "gaming_group_image_holder.jpg", alt: "Gaming Group Image", class: "card-img-top" %>
-  <div class="card-body">
-    <h5 class="card-title"><%= @gaming_group.name %></h5>
-    <%= link_to 'View', gaming_group_path(@gaming_group), class: ['btn', 'btn-primary'] %>
+<div class="col">
+  <div class="card">
+    <%= image_tag "gaming_group_image_holder.jpg", alt: "Gaming Group Image", class: "card-img-top" %>
+    <div class="card-body">
+      <h5 class="card-title"><%= @gaming_group.name %></h5>
+      <%= link_to 'View', gaming_group_path(@gaming_group), class: ['btn', 'btn-primary'] %>
+    </div>
   </div>
 </div>

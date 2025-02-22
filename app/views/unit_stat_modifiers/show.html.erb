@@ -1,27 +1,21 @@
-<div class="container">
-  <div class="row">
-    <div class="col">
-      <%= render RecordShowWrapperComponent.new(
-        record: @unit_stat_modifier,
-        title: @unit_stat_modifier.name,
-        menu_options: [
-          { 
-            text: "Edit",
-            link: edit_unit_stat_modifier_path(@unit_stat_modifier)
-          },
-          {
-            text: "Delete",
-            link: unit_stat_modifier_path(@unit_stat_modifier),
-            data: {turbo_method: :delete, turbo_confirm: "Are you sure?"}
-          }
-        ]
-      ) do |component| %>
+<%= render RecordShowWrapperComponent.new(
+  record: @unit_stat_modifier,
+  title: @unit_stat_modifier.name,
+  menu_options: [
+    { 
+      text: "Edit",
+      link: edit_unit_stat_modifier_path(@unit_stat_modifier)
+    },
+    {
+      text: "Delete",
+      link: unit_stat_modifier_path(@unit_stat_modifier),
+      data: {turbo_method: :delete, turbo_confirm: "Are you sure?"}
+    }
+  ]
+) do |component| %>
 
-        <% component.with_body do %>
+  <% component.with_box(title: "Details") do %>
 
-          <%= render @unit_stat_modifier %>
-        <% end %>
-      <% end %>
-    </div>
-  </div>
-</div>
+    <%= render @unit_stat_modifier %>
+  <% end %>
+<% end %>

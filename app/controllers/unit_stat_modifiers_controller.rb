@@ -1,9 +1,10 @@
 class UnitStatModifiersController < ApplicationController
+  include GameSystemPart
+
   before_action :set_unit_stat_modifier, only: %i[show edit update destroy]
 
   # GET /unit_stat_modifiers or /unit_stat_modifiers.json
   def index
-    @unit_stat_modifiers = UnitStatModifier.all
   end
 
   # GET /unit_stat_modifiers/1 or /unit_stat_modifiers/1.json
@@ -12,7 +13,6 @@ class UnitStatModifiersController < ApplicationController
 
   # GET /unit_stat_modifiers/new
   def new
-    @unit_stat_modifier = UnitStatModifier.new(game_system: get_game_system)
   end
 
   # GET /unit_stat_modifiers/1/edit
@@ -63,17 +63,13 @@ class UnitStatModifiersController < ApplicationController
         render turbo_stream: turbo_stream.append(
           "stat_change_list",
           partial: "unit_stat_changes/form_row",
-          locals: {form: ff, game_system: get_game_system}
+          locals: {form: ff, game_system: @game_system}
         )
       end
     end
   end
 
   private
-
-  def get_game_system
-    GameSystem.find(params.permit(:game_system_id)[:game_system_id])
-  end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_unit_stat_modifier
@@ -82,7 +78,7 @@ class UnitStatModifiersController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def unit_stat_modifier_params
-    params.require(:unit_stat_modifier).permit(:game_system_id, :cost, :active, :name, :description,
+    params.require(:unit_stat_modifier).permit(:game_system_id, :cost, :active, :name, :rich_description,
       unit_stat_changes_attributes: [:id, :stat_change, :unit_stat_definition_id])
   end
 end

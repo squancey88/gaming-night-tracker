@@ -1,0 +1,20 @@
+<%= render Common::CardWithMenuComponent.new(
+  title: unit.name,
+  subtitle: "Cost: #{unit.total_cost}",
+  menu_options: [
+  { 
+    text: "Edit",
+    link: edit_army_list_unit_path(army_list, unit)
+  },
+  {
+    text: "Clone",
+    link: new_army_list_unit_path(army_list, cloned_from_id: unit.id)
+  }
+  ]) do |card| %>
+  <% card.with_body do %>
+    <%= render Units::StatRowComponent.new(unit_stats: unit.unit_stats) %>
+    <div>XP: <%= unit.current_xp %></div>
+    <%= traits_list(unit) %>
+    <%= unit_trait_category_list(unit) %>
+  <% end %>
+<% end %>

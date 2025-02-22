@@ -1,5 +1,6 @@
 class UnitTemplatesController < ApplicationController
-  before_action :set_game_system, only: %i[index new add_trait_row]
+  include GameSystemPart
+
   before_action :set_unit_template, only: %i[show edit update destroy]
 
   # GET /unit_templates or /unit_templates.json
@@ -13,7 +14,6 @@ class UnitTemplatesController < ApplicationController
 
   # GET /unit_templates/new
   def new
-    @unit_template = UnitTemplate.new_with_stats(@game_system)
   end
 
   # GET /unit_templates/1/edit
@@ -77,8 +77,8 @@ class UnitTemplatesController < ApplicationController
 
   private
 
-  def set_game_system
-    @game_system = GameSystem.find(params[:game_system_id])
+  def new_record
+    @unit_template = UnitTemplate.new_with_stats(@game_system)
   end
 
   # Use callbacks to share common setup or constraints between actions.
@@ -90,6 +90,7 @@ class UnitTemplatesController < ApplicationController
   def unit_template_params
     params.require(:unit_template).permit(:name, :cost, :game_system_id, :army_id,
       unit_template_stats_attributes: [:id, :base_value, :unit_stat_definition_id],
-      unit_template_trait_mappings_attributes: [:id, :unit_trait_id])
+      unit_template_trait_mappings_attributes: [:id, :unit_trait_id],
+      unit_trait_category_mappings_attributes: [:unit_trait_category_id, :order, :_destroy, :id])
   end
 end

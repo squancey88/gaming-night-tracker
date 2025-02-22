@@ -1,0 +1,5 @@
+<div class="form-row">
+  <%= unit_select(form, user_player.player_armies.first.army_list, :unit_id) %>
+  <%= unit_stat_modifier_select(form, game_system, :unit_stat_modifier_id) %>
+  <%= form.hidden_field :game_id %>
+</div>

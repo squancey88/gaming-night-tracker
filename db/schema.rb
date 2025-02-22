@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_12_23_163021) do
+ActiveRecord::Schema[7.1].define(version: 2025_01_25_170008) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -248,6 +248,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_12_23_163021) do
     t.boolean "active"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.jsonb "rich_description"
     t.index ["game_system_id"], name: "index_unit_stat_modifiers_on_game_system_id"
   end
 
@@ -291,6 +292,25 @@ ActiveRecord::Schema[7.1].define(version: 2024_12_23_163021) do
     t.index ["game_system_id"], name: "index_unit_templates_on_game_system_id"
   end
 
+  create_table "unit_trait_categories", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name"
+    t.uuid "game_system_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["game_system_id"], name: "index_unit_trait_categories_on_game_system_id"
+  end
+
+  create_table "unit_trait_category_mappings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "mapped_to_type"
+    t.bigint "mapped_to_id"
+    t.uuid "unit_trait_category_id", null: false
+    t.integer "order"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["mapped_to_type", "mapped_to_id"], name: "index_unit_trait_category_mappings_on_mapped_to"
+    t.index ["unit_trait_category_id"], name: "index_unit_trait_category_mappings_on_unit_trait_category_id"
+  end
+
   create_table "unit_trait_mappings", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "unit_id", null: false
     t.uuid "unit_trait_id", null: false
@@ -309,8 +329,32 @@ ActiveRecord::Schema[7.1].define(version: 2024_12_23_163021) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.jsonb "rich_description"
+    t.uuid "unit_trait_category_id"
     t.index ["army_id"], name: "index_unit_traits_on_army_id"
     t.index ["game_system_id"], name: "index_unit_traits_on_game_system_id"
+    t.index ["unit_trait_category_id"], name: "index_unit_traits_on_unit_trait_category_id"
+  end
+
+  create_table "unit_xp_gain_applieds", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "game_id", null: false
+    t.uuid "unit_id", null: false
+    t.uuid "unit_xp_gain_event_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["game_id"], name: "index_unit_xp_gain_applieds_on_game_id"
+    t.index ["unit_id"], name: "index_unit_xp_gain_applieds_on_unit_id"
+    t.index ["unit_xp_gain_event_id"], name: "index_unit_xp_gain_applieds_on_unit_xp_gain_event_id"
+  end
+
+  create_table "unit_xp_gain_events", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name"
+    t.jsonb "description"
+    t.integer "xp_gain"
+    t.uuid "game_system_id", null: false
+    t.boolean "active"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["game_system_id"], name: "index_unit_xp_gain_events_on_game_system_id"
   end
 
   create_table "units", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -323,6 +367,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_12_23_163021) do
     t.uuid "army_list_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "starting_xp", default: 0, null: false
     t.index ["army_list_id"], name: "index_units_on_army_list_id"
   end
 
@@ -416,10 +461,17 @@ ActiveRecord::Schema[7.1].define(version: 2024_12_23_163021) do
   add_foreign_key "unit_template_trait_mappings", "unit_traits"
   add_foreign_key "unit_templates", "armies"
   add_foreign_key "unit_templates", "game_systems"
+  add_foreign_key "unit_trait_categories", "game_systems"
+  add_foreign_key "unit_trait_category_mappings", "unit_trait_categories"
   add_foreign_key "unit_trait_mappings", "unit_traits"
   add_foreign_key "unit_trait_mappings", "units"
   add_foreign_key "unit_traits", "armies"
   add_foreign_key "unit_traits", "game_systems"
+  add_foreign_key "unit_traits", "unit_trait_categories"
+  add_foreign_key "unit_xp_gain_applieds", "games"
+  add_foreign_key "unit_xp_gain_applieds", "unit_xp_gain_events"
+  add_foreign_key "unit_xp_gain_applieds", "units"
+  add_foreign_key "unit_xp_gain_events", "game_systems"
   add_foreign_key "units", "army_lists"
   add_foreign_key "worlds", "users", column: "owner_id"
 end

@@ -39,8 +39,8 @@ class GameSystem < ApplicationRecord
     self.class.category_name
   end
 
-  def game_data_form_component(game)
-    # Optional override for additional form components
+  def game_data_form_components(game)
+    []
   end
 
   def player_form_components

@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :game do
     gaming_session
-    game_system
+    game_system { create(:wargame) }
 
     transient do
       player_count { 2 }

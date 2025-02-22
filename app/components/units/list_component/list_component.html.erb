@@ -15,24 +15,7 @@
 
   <% component.with_body do %>
     <% @army_list.units.each do |unit| %>
-      <%= render Common::CardWithMenuComponent.new(
-        title: unit.name,
-        subtitle: "Cost: #{unit.total_cost}",
-        menu_options: [
-        { 
-          text: "Edit",
-          link: edit_army_list_unit_path(@army_list, unit)
-        },
-        {
-          text: "Clone",
-          link: new_army_list_unit_path(@army_list, cloned_from_id: unit.id)
-        }
-        ]) do |card| %>
-        <% card.with_body do %>
-          <%= render Units::StatRowComponent.new(unit_stats: unit.unit_stats) %>
-          <%= traits_list(unit) %>
-        <% end %>
-      <% end %>
+      <%= render partial: "units/unit_card", locals: { unit:, army_list: @army_list } %>
     <% end %>
   <% end %>
 <% end %>

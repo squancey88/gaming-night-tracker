@@ -2,6 +2,7 @@ require "rails_helper"
 
 RSpec.describe "/unit_stat_modifiers", type: :request do
   let(:game_system) { create(:wargame) }
+  let!(:unit_stat_modifier) { create(:unit_stat_modifier, game_system:) }
   let(:user) { create(:user) }
 
   let(:valid_attributes) {
@@ -24,15 +25,13 @@ RSpec.describe "/unit_stat_modifiers", type: :request do
 
   describe "GET /index" do
     it "renders a successful response" do
-      UnitStatModifier.create! valid_attributes
-      get unit_stat_modifiers_url
+      get unit_stat_modifiers_url(game_system_id: game_system.id)
       expect(response).to be_successful
     end
   end
 
   describe "GET /show" do
     it "renders a successful response" do
-      unit_stat_modifier = UnitStatModifier.create! valid_attributes
       get unit_stat_modifier_url(unit_stat_modifier)
       expect(response).to be_successful
     end
@@ -47,7 +46,6 @@ RSpec.describe "/unit_stat_modifiers", type: :request do
 
   describe "GET /edit" do
     it "renders a successful response" do
-      unit_stat_modifier = UnitStatModifier.create! valid_attributes
       get edit_unit_stat_modifier_url(unit_stat_modifier)
       expect(response).to be_successful
     end
@@ -63,7 +61,7 @@ RSpec.describe "/unit_stat_modifiers", type: :request do
 
       it "redirects to the created unit_stat_modifier" do
         post unit_stat_modifiers_url, params: {unit_stat_modifier: valid_attributes}
-        expect(response).to redirect_to(unit_stat_modifier_url(UnitStatModifier.last))
+        expect(response).to redirect_to(unit_stat_modifier_url(UnitStatModifier.order(:created_at).last))
       end
     end
 
@@ -89,14 +87,12 @@ RSpec.describe "/unit_stat_modifiers", type: :request do
       }
 
       it "updates the requested unit_stat_modifier" do
-        unit_stat_modifier = UnitStatModifier.create! valid_attributes
         patch unit_stat_modifier_url(unit_stat_modifier), params: {unit_stat_modifier: new_attributes}
         unit_stat_modifier.reload
         expect(unit_stat_modifier.name).to eq(new_name)
       end
 
       it "redirects to the unit_stat_modifier" do
-        unit_stat_modifier = UnitStatModifier.create! valid_attributes
         patch unit_stat_modifier_url(unit_stat_modifier), params: {unit_stat_modifier: new_attributes}
         unit_stat_modifier.reload
         expect(response).to redirect_to(unit_stat_modifier_url(unit_stat_modifier))
@@ -105,7 +101,6 @@ RSpec.describe "/unit_stat_modifiers", type: :request do
 
     context "with invalid parameters" do
       it "renders a response with 422 status (i.e. to display the 'edit' template)" do
-        unit_stat_modifier = UnitStatModifier.create! valid_attributes
         patch unit_stat_modifier_url(unit_stat_modifier), params: {unit_stat_modifier: invalid_attributes}
         expect(response).to have_http_status(:unprocessable_entity)
       end
@@ -114,14 +109,12 @@ RSpec.describe "/unit_stat_modifiers", type: :request do
 
   describe "DELETE /destroy" do
     it "destroys the requested unit_stat_modifier" do
-      unit_stat_modifier = UnitStatModifier.create! valid_attributes
       expect {
         delete unit_stat_modifier_url(unit_stat_modifier)
       }.to change(UnitStatModifier, :count).by(-1)
     end
 
     it "redirects to the unit_stat_modifiers list" do
-      unit_stat_modifier = UnitStatModifier.create! valid_attributes
       delete unit_stat_modifier_url(unit_stat_modifier)
       expect(response).to redirect_to(unit_stat_modifiers_url)
     end

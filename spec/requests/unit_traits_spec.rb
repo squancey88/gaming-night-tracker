@@ -3,10 +3,16 @@ require "rails_helper"
 RSpec.describe "/unit_traits", type: :request do
   let(:user) { create(:user) }
   let(:game_system) { create(:wargame) }
+  let!(:unit_trait) { create(:unit_trait, game_system:) }
+  let(:unit_trait_category) { create(:unit_trait_category, game_system:) }
   let(:valid_attributes) {
     {
       name: Faker::Lorem.word,
-      game_system_id: game_system.id
+      game_system_id: game_system.id,
+      unit_trait_category_mappings_attributes: [{
+        unit_trait_category_id: unit_trait_category.id,
+        order: 1
+      }]
     }
   }
 
@@ -23,7 +29,6 @@ RSpec.describe "/unit_traits", type: :request do
 
   describe "GET /index" do
     it "renders a successful response" do
-      UnitTrait.create! valid_attributes
       get unit_traits_url(game_system_id: game_system.id)
       expect(response).to be_successful
     end
@@ -31,7 +36,6 @@ RSpec.describe "/unit_traits", type: :request do
 
   describe "GET /show" do
     it "renders a successful response" do
-      unit_trait = UnitTrait.create! valid_attributes
       get unit_trait_url(unit_trait)
       expect(response).to be_successful
     end
@@ -46,7 +50,6 @@ RSpec.describe "/unit_traits", type: :request do
 
   describe "GET /edit" do
     it "renders a successful response" do
-      unit_trait = UnitTrait.create! valid_attributes
       get edit_unit_trait_url(unit_trait)
       expect(response).to be_successful
     end
@@ -58,6 +61,12 @@ RSpec.describe "/unit_traits", type: :request do
         expect {
           post unit_traits_url, params: {unit_trait: valid_attributes}
         }.to change(UnitTrait, :count).by(1)
+      end
+
+      it "creates a new UnitTraitCategoryMapping" do
+        expect {
+          post unit_traits_url, params: {unit_trait: valid_attributes}
+        }.to change(UnitTraitCategoryMapping, :count).by(1)
       end
 
       it "redirects to the created unit_trait" do
@@ -87,14 +96,12 @@ RSpec.describe "/unit_traits", type: :request do
       }
 
       it "updates the requested unit_trait" do
-        unit_trait = UnitTrait.create! valid_attributes
         patch unit_trait_url(unit_trait), params: {unit_trait: new_attributes}
         unit_trait.reload
         expect(unit_trait.name).to eq "New name"
       end
 
       it "redirects to the unit_trait" do
-        unit_trait = UnitTrait.create! valid_attributes
         patch unit_trait_url(unit_trait), params: {unit_trait: new_attributes}
         unit_trait.reload
         expect(response).to redirect_to(game_systems_wargame_url(game_system))
@@ -103,7 +110,6 @@ RSpec.describe "/unit_traits", type: :request do
 
     context "with invalid parameters" do
       it "renders a response with 422 status (i.e. to display the 'edit' template)" do
-        unit_trait = UnitTrait.create! valid_attributes
         patch unit_trait_url(unit_trait), params: {unit_trait: invalid_attributes}
         expect(response).to have_http_status(:unprocessable_entity)
       end
@@ -112,14 +118,12 @@ RSpec.describe "/unit_traits", type: :request do
 
   describe "DELETE /destroy" do
     it "destroys the requested unit_trait" do
-      unit_trait = UnitTrait.create! valid_attributes
       expect {
         delete unit_trait_url(unit_trait)
       }.to change(UnitTrait, :count).by(-1)
     end
 
     it "redirects to the unit_traits list" do
-      unit_trait = UnitTrait.create! valid_attributes
       delete unit_trait_url(unit_trait)
       expect(response).to redirect_to(unit_traits_url)
     end

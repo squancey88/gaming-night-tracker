@@ -117,6 +117,7 @@ class UnitsController < ApplicationController
   def unit_params
     params.require(:unit).permit(:name, :description, :cost, stats: {},
       unit_stats_attributes: [:id, :base_value, :unit_stat_definition_id],
-      unit_trait_mappings_attributes: [:id, :unit_trait_id])
+      unit_trait_mappings_attributes: [:id, :unit_trait_id],
+      unit_trait_category_mappings_attributes: [:unit_trait_category_id, :order, :_destroy, :id])
   end
 end

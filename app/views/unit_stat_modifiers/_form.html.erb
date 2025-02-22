@@ -2,14 +2,15 @@
 
   <%= render RecordFormWrapperComponent.new(record: unit_stat_modifier, form:) do |component| %>
 
-    <% component.with_form_box do %>
+    <% component.with_form_box(title: "Details") do %>
 
-      <%= bootstrap_game_system_select(form, :game_system_id) %> 
+      <%= form.hidden_field :game_system_id %> 
       <%= bootstrap_text_form(form, :name) %>
-      <%= bootstrap_text_form(form, :description) %>
       <%= bootstrap_number_form(form, :cost) %>
       <%= bootstrap_check_box(form, :active) %>
+    <% end %>
 
+    <% component.with_form_box(title: "Stat Changes") do %>
 
       <% if @unit_stat_modifier.game_system%>
         <%= turbo_frame_tag :stat_change_list  do %>
@@ -27,6 +28,10 @@
         <p>Save your record to add stat changes</p>
       <% end %>
       
+    <% end %>
+    <% component.with_form_box(title: "Description") do %>
+
+      <%= render TextEditorComponent.new(form:, attribute: :rich_description) %>
     <% end %>
   <% end %>
 <% end %>

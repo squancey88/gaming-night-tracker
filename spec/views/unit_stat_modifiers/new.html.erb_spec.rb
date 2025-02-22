@@ -9,10 +9,7 @@ RSpec.describe "unit_stat_modifiers/new", type: :view do
     render
 
     assert_select "form[action=?][method=?]", unit_stat_modifiers_path, "post" do
-      assert_select "select[name=?]", "unit_stat_modifier[game_system_id]"
-
       assert_select "input[name=?]", "unit_stat_modifier[cost]"
-
       assert_select "input[name=?]", "unit_stat_modifier[active]"
     end
   end

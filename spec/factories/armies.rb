@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :army do
     name { "My Army" }
-    game_system
+    game_system { create(:wargame) }
   end
 end

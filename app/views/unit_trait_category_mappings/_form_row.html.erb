@@ -1,0 +1,6 @@
+<div class="form-row unit-stat-definition-form">
+  <%= unit_trait_category_select(form, :unit_trait_category_id, game_system) %>
+  <%= bootstrap_precedence_select(form, :order) %>
+  <%= bootstrap_check_box(form, :_destroy) %>
+  <%= form.hidden_field :id %>
+</div>

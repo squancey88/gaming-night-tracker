@@ -27,4 +27,6 @@ class ArmyList < ApplicationRecord
     return starting_cost - list_cost if starting_cost
     0
   end
+
+  def to_s = name
 end

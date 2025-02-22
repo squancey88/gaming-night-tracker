@@ -12,7 +12,7 @@ RSpec.describe "games/show", type: :view do
   end
 
   it "renders standard box" do
-    expect(rendered).to have_css(".standard-box-content")
+    expect(rendered).to have_css(".standard-box_content")
   end
 
   it "renders finish section" do

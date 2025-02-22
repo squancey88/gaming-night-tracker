@@ -29,6 +29,7 @@
     <% end %>
     <%= render Layout::MainHeaderComponent.new %>
     <%= render Layout::SystemAdminMenuComponent.new %>
+    <%= render Layout::GameSystemMenuComponent.new(game_system: @game_system) %>
     <%= render Layout::WorldBuilderMenuComponent.new(world_building: @world_building) %>
     <%= render Common::FlashHandlerComponent.new(flash) %>
 

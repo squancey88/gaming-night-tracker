@@ -3,12 +3,9 @@
 <h1>Units</h1>
 
 <div id="units">
-  <% @units.each do |unit| %>
-    <%= render unit %>
-    <p>
-      <%= link_to "Show this unit", army_list_unit_path(@army_list, unit) %>
-    </p>
+  <%= turbo_frame_tag :units do %>
+    <% @units.each do |unit| %>
+      <%= render partial: "units/unit_card", locals: { unit:, army_list: @army_list } %>
+    <% end %>
   <% end %>
 </div>
-
-<%= link_to "New unit", new_army_list_unit_path(@army_list) %>

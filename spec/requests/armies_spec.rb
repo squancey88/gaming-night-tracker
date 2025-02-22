@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "/armies", type: :request do
   let(:user) { create(:user) }
-  let(:game_system) { create(:game_system) }
+  let(:game_system) { create(:wargame) }
 
   let(:valid_attributes) {
     {

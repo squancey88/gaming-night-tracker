@@ -1,0 +1,8 @@
+
+<% @game.game_system.campaign_list_attributes.each do |attribute| %>
+  <div class="form-floating">
+    <%= input_field_of_type(attribute["type"], field_name(attribute["key"]), attribute["name"],
+      get_value(attribute["key"])) %>
+    <%= label_tag(field_name(attribute["key"]), attribute["name"]) %>
+  </div>
+<% end %>

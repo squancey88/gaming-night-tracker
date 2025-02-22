@@ -47,6 +47,11 @@ Rails.application.routes.draw do
   resources :equipment
 
   resources :unit_traits
+  resources :unit_trait_categories do
+    collection do
+      get :add_category_row
+    end
+  end
   resources :unit_templates do
     collection do
       get :add_trait_row
@@ -57,6 +62,7 @@ Rails.application.routes.draw do
       get :add_stat_change_row
     end
   end
+  resources :unit_xp_gain_events
   resources :players, only: %i[update] do
     member do
       get :add_army_row
@@ -75,7 +81,12 @@ Rails.application.routes.draw do
     resources :gaming_sessions
   end
 
-  resources :games
+  resources :games do
+    member do
+      get :add_xp_gain_applied_row
+      get :add_unit_applied_modifier_row
+    end
+  end
   resources :users, only: %i[show update] do
     member do
       get :campaigns

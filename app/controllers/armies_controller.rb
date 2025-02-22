@@ -1,14 +1,9 @@
 class ArmiesController < ApplicationController
-  before_action :set_game_system, only: %i[new index]
+  include GameSystemPart
   before_action :set_army, only: %i[show edit update destroy]
 
   # GET /armies or /armies.json
   def index
-    results = @game_system.armies
-    respond_to do |format|
-      format.html { @pagy, @armies = pagy(results) }
-      format.json { @armies = results }
-    end
   end
 
   # GET /armies/1 or /armies/1.json
@@ -17,7 +12,6 @@ class ArmiesController < ApplicationController
 
   # GET /armies/new
   def new
-    @army = Army.new(game_system: @game_system)
   end
 
   # GET /armies/1/edit
@@ -64,10 +58,6 @@ class ArmiesController < ApplicationController
   end
 
   private
-
-  def set_game_system
-    @game_system = GameSystem.find(params[:game_system_id])
-  end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_army

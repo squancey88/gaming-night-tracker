@@ -2,13 +2,13 @@
 
 require "rails_helper"
 
-RSpec.describe TurnBasedGameFormComponent, type: :component do
+RSpec.describe GameForms::TurnBasedComponent, type: :component do
   let(:game_system) { create(:wargame, :turn_based) }
   let(:game) { create(:game, game_system:) }
 
   context "without data" do
     before do
-      render_inline(described_class.new(game:))
+      render_inline(described_class.new(game:, form: nil, user_player: nil))
     end
 
     it "should render add new turn button" do
@@ -32,7 +32,7 @@ RSpec.describe TurnBasedGameFormComponent, type: :component do
       player1.save!
       player2.save!
       game.reload
-      render_inline(described_class.new(game:))
+      render_inline(described_class.new(game:, form: nil, user_player: nil))
     end
 
     it "should render the correct number of inputs" do

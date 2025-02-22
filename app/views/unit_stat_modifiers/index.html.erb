@@ -3,11 +3,18 @@
 <h1>Unit stat modifiers</h1>
 
 <div id="unit_stat_modifiers">
-  <% @unit_stat_modifiers.each do |unit_stat_modifier| %>
-    <%= render unit_stat_modifier %>
-    <p>
-      <%= link_to "Show this unit stat modifier", unit_stat_modifier %>
-    </p>
+  <%= turbo_frame_tag :unit_stat_modifiers do %>
+    <% @unit_stat_modifiers.each do |unit_stat_modifier| %>
+      <%= render Common::CardWithMenuComponent.new(title: "#{unit_stat_modifier.name}",
+        menu_options: [
+          {link: edit_unit_stat_modifier_path(unit_stat_modifier), text: "Edit", target: "_top"}
+          ]) do |card| %>
+        <% card.with_body do %>
+          <%= render TextEditorRenderComponent.new(model: unit_stat_modifier, attribute: :rich_description) %>
+        <% end %>
+      <% end %>
+    <% end %>
+    <%== pagy_bootstrap_nav(@pagy) %>
   <% end %>
 </div>
 

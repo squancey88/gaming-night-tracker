@@ -2,6 +2,7 @@ require "rails_helper"
 
 RSpec.describe "/unit_templates", type: :request do
   let(:game_system) { create(:wargame) }
+  let!(:unit_template) { create(:unit_template, game_system:) }
   let(:army) { create(:army, game_system:) }
   let(:user) { create(:user) }
 
@@ -27,7 +28,6 @@ RSpec.describe "/unit_templates", type: :request do
 
   describe "GET /index" do
     it "renders a successful response" do
-      UnitTemplate.create! valid_attributes
       get unit_templates_url(game_system_id: game_system.id)
       expect(response).to be_successful
     end
@@ -35,7 +35,6 @@ RSpec.describe "/unit_templates", type: :request do
 
   describe "GET /show" do
     it "renders a successful response" do
-      unit_template = UnitTemplate.create! valid_attributes
       get unit_template_url(unit_template)
       expect(response).to be_successful
     end
@@ -50,7 +49,6 @@ RSpec.describe "/unit_templates", type: :request do
 
   describe "GET /edit" do
     it "renders a successful response" do
-      unit_template = UnitTemplate.create! valid_attributes
       get edit_unit_template_url(unit_template)
       expect(response).to be_successful
     end
@@ -66,7 +64,7 @@ RSpec.describe "/unit_templates", type: :request do
 
       it "redirects to the created unit_template" do
         post unit_templates_url, params: {unit_template: valid_attributes}
-        expect(response).to redirect_to(unit_template_url(UnitTemplate.last))
+        expect(response).to redirect_to(unit_template_url(UnitTemplate.order(:created_at).last))
       end
     end
 
@@ -91,14 +89,12 @@ RSpec.describe "/unit_templates", type: :request do
       }
 
       it "updates the requested unit_template" do
-        unit_template = UnitTemplate.create! valid_attributes
         patch unit_template_url(unit_template), params: {unit_template: new_attributes}
         unit_template.reload
         expect(unit_template.name).to eq "New name"
       end
 
       it "redirects to the unit_template" do
-        unit_template = UnitTemplate.create! valid_attributes
         patch unit_template_url(unit_template), params: {unit_template: new_attributes}
         unit_template.reload
         expect(response).to redirect_to(unit_template_url(unit_template))
@@ -107,7 +103,6 @@ RSpec.describe "/unit_templates", type: :request do
 
     context "with invalid parameters" do
       it "renders a response with 422 status (i.e. to display the 'edit' template)" do
-        unit_template = UnitTemplate.create! valid_attributes
         patch unit_template_url(unit_template), params: {unit_template: invalid_attributes}
         expect(response).to have_http_status(:unprocessable_entity)
       end
@@ -116,14 +111,12 @@ RSpec.describe "/unit_templates", type: :request do
 
   describe "DELETE /destroy" do
     it "destroys the requested unit_template" do
-      unit_template = UnitTemplate.create! valid_attributes
       expect {
         delete unit_template_url(unit_template)
       }.to change(UnitTemplate, :count).by(-1)
     end
 
     it "redirects to the unit_templates list" do
-      unit_template = UnitTemplate.create! valid_attributes
       delete unit_template_url(unit_template)
       expect(response).to redirect_to(unit_templates_url)
     end

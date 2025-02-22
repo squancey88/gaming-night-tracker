@@ -9,7 +9,7 @@
     {
       text: "Delete",
       link: game_systems_wargame_path(@wargame),
-      data: {turbo_method: :delete, turbo_confirm: "Are you sure?"}
+      data: {turbo_event: :delete, turbo_confirm: "Are you sure?"}
     }
   ]
 ) do |component| %>
@@ -37,6 +37,22 @@
   <% end %>
 
   <% component.with_space do %>
+    <%= render Common::EmbeddedIndexComponent.new(title: "Equipment",
+        turbo_frame_id: "equipment",
+        records_path: equipment_index_path(game_system_id: @wargame.id),
+        new_path: new_equipment_path(game_system_id: @wargame.id)
+      ) %>
+  <% end %>
+
+  <% component.with_space do %>
+    <%= render Common::EmbeddedIndexComponent.new(title: "Trait Categories",
+        turbo_frame_id: "unit_trait_categories",
+        records_path: unit_trait_categories_path(game_system_id: @wargame.id),
+        new_path: new_unit_trait_category_path(game_system_id: @wargame.id)
+      ) %>
+  <% end %>
+
+  <% component.with_space do %>
     <%= render Common::EmbeddedIndexComponent.new(title: "Traits",
         turbo_frame_id: "unit_traits",
         records_path: unit_traits_path(game_system_id: @wargame.id),
@@ -45,10 +61,19 @@
   <% end %>
 
   <% component.with_space do %>
-    <%= render Common::EmbeddedIndexComponent.new(title: "Equipment",
-        turbo_frame_id: "equipment",
-        records_path: equipment_index_path(game_system_id: @wargame.id),
-        new_path: new_equipment_path(game_system_id: @wargame.id)
+    <%= render Common::EmbeddedIndexComponent.new(title: "XP Gains",
+        turbo_frame_id: "unit_xp_gain_events",
+        records_path: unit_xp_gain_events_path(game_system_id: @wargame.id),
+        new_path: new_unit_xp_gain_event_path(game_system_id: @wargame.id)
       ) %>
   <% end %>
+
+  <% component.with_space do %>
+    <%= render Common::EmbeddedIndexComponent.new(title: "Stat Modifiers",
+        turbo_frame_id: "unit_stat_modifiers",
+        records_path: unit_stat_modifiers_path(game_system_id: @wargame.id),
+        new_path: new_unit_stat_modifier_path(game_system_id: @wargame.id)
+      ) %>
+  <% end %>
+
 <% end %>

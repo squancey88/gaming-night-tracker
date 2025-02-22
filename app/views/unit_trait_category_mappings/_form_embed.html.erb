@@ -1,0 +1,14 @@
+<h3 class="mt-1">Trait Categories</h3>
+
+<%= turbo_frame_tag :unit_trait_category_mappings  do %>
+  <%= form.fields_for :unit_trait_category_mappings do |trait_categories_form| %>
+    <%= render partial: "unit_trait_category_mappings/form_row", locals: {
+      form: trait_categories_form, game_system: record.game_system
+    } %>
+  <% end %>
+<% end %>
+
+<%= link_to "Add Category", 
+  add_category_row_unit_trait_categories_path(type: record.class.to_s, game_system_id: record.game_system.id), 
+  class: ['btn', 'btn-secondary'],
+  data: {turbo_frame: :unit_trait_category_mappings, turbo_stream: true} %>

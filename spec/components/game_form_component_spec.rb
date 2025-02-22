@@ -11,7 +11,7 @@ RSpec.describe GameFormComponent, type: :component do
     render_inline described_class.new(game:)
   end
 
-  it "should render the TurnBasedGameFormComponent" do
+  it "should render the GameForms::TurnBasedComponent" do
     expect(page).to have_css(".turn-grid")
   end
 end

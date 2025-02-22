@@ -15,4 +15,11 @@ RSpec.describe Team, type: :model do
       expect(team.valid?).to be false
     end
   end
+
+  context "#display_name" do
+    it "should be name" do
+      team = create(:team, name: "Best Team")
+      expect(team.display_name).to eq "Best Team"
+    end
+  end
 end

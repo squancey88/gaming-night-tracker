@@ -8,7 +8,6 @@
 @import "../../components/session_game_list_component/session_game_list_component.scss";
 @import "../../components/standard_layout_box_component/standard_layout_box_component.scss";
 @import "../../components/text_editor_component/text_editor_component.scss";
-@import "../../components/turn_based_game_form_component/turn_based_game_form_component.scss";
 
 @import "../../components/common/card_with_menu_component/card_with_menu_component.scss";
 @import "../../components/layout/main_header_component/main_header_component.scss";
@@ -17,3 +16,6 @@
 
 @import "../../components/units/stat_row_component/stat_row_component.scss";
 @import "../../components/units/list_component/list_component.scss";
+
+// Game Forms
+@import "../../components/game_forms/turn_based_component/turn_based_component.scss";

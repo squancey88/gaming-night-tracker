@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe "/games", type: :request do
   let(:gaming_session) { create(:gaming_session) }
   let(:game_system) { create(:wargame, :turn_based) }
-  let(:new_game_system) { create(:game_system) }
+  let(:new_game_system) { create(:wargame) }
   let(:user) { create(:user) }
   let(:user2) { create(:user) }
   let(:valid_attributes) {

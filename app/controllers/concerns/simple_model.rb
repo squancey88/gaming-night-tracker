@@ -59,7 +59,7 @@ module SimpleModel
   private
 
   def new_record(values = {})
-    controller_name.classify.constantize.new(world: @world, **values)
+    controller_name.classify.constantize.new(**values)
   end
 
   def set_record
@@ -67,6 +67,6 @@ module SimpleModel
   end
 
   def set_records
-    @records = controller_name.classify.constantize.all
+    @pagy, @records = pagy(controller_name.classify.constantize.all)
   end
 end

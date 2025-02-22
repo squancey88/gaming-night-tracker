@@ -3,6 +3,7 @@ require "rails_helper"
 RSpec.describe "/units", type: :request do
   let(:army_list) { create(:army_list) }
   let(:user) { create(:user) }
+  let!(:unit) { create(:unit, army_list:) }
 
   let(:valid_attributes) {
     {
@@ -23,7 +24,6 @@ RSpec.describe "/units", type: :request do
 
   describe "GET /index" do
     it "renders a successful response" do
-      Unit.create! valid_attributes
       get army_list_units_url(army_list)
       expect(response).to be_successful
     end
@@ -31,7 +31,6 @@ RSpec.describe "/units", type: :request do
 
   describe "GET /show" do
     it "renders a successful response" do
-      unit = Unit.create! valid_attributes
       get army_list_unit_url(army_list, unit)
       expect(response).to be_successful
     end
@@ -46,7 +45,6 @@ RSpec.describe "/units", type: :request do
 
   describe "GET /edit" do
     it "renders a successful response" do
-      unit = Unit.create! valid_attributes
       get edit_army_list_unit_url(army_list, unit)
       expect(response).to be_successful
     end
@@ -89,14 +87,12 @@ RSpec.describe "/units", type: :request do
       }
 
       it "updates the requested unit" do
-        unit = Unit.create! valid_attributes
         patch army_list_unit_url(army_list, unit), params: {unit: new_attributes}
         unit.reload
         expect(unit.name).to eq("New name")
       end
 
       it "redirects to the unit" do
-        unit = Unit.create! valid_attributes
         patch army_list_unit_url(army_list, unit), params: {unit: new_attributes}
         unit.reload
         expect(response).to redirect_to(army_list_url(army_list))
@@ -105,7 +101,6 @@ RSpec.describe "/units", type: :request do
 
     context "with invalid parameters" do
       it "renders a response with 422 status (i.e. to display the 'edit' template)" do
-        unit = Unit.create! valid_attributes
         patch army_list_unit_url(army_list, unit), params: {unit: invalid_attributes}
         expect(response).to have_http_status(:unprocessable_entity)
       end
@@ -114,14 +109,12 @@ RSpec.describe "/units", type: :request do
 
   describe "DELETE /destroy" do
     it "destroys the requested unit" do
-      unit = Unit.create! valid_attributes
       expect {
         delete army_list_unit_url(army_list, unit)
       }.to change(Unit, :count).by(-1)
     end
 
     it "redirects to the units list" do
-      unit = Unit.create! valid_attributes
       delete army_list_unit_url(army_list, unit)
       expect(response).to redirect_to(army_list_url(army_list))
     end

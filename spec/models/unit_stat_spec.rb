@@ -8,6 +8,8 @@ RSpec.describe UnitStat, type: :model do
 
   context "current_value" do
     let(:unit_stat_definition) { create(:unit_stat_definition) }
+    let(:save_stat) { create(:unit_stat_definition, stat_type: :save_stat) }
+
     let(:no_modifiers) { create(:unit_stat, base_value: 10) }
     let(:with_modifier) {
       unit = create(:unit)
@@ -28,6 +30,14 @@ RSpec.describe UnitStat, type: :model do
       create(:unit_stat, base_value: 10, unit:, unit_stat_definition:)
     }
 
+    let(:save_with_modifier) {
+      unit = create(:unit)
+      mod = create(:unit_stat_modifier)
+      create(:unit_stat_change, unit_stat_modifier: mod, unit_stat_definition: save_stat, stat_change: -1)
+      create(:unit_applied_modifier, unit:, unit_stat_modifier: mod)
+      create(:unit_stat, base_value: 4, unit:, unit_stat_definition: save_stat)
+    }
+
     it "should return value with no modifiers" do
       expect(no_modifiers.current_value).to eq 10
     end
@@ -38,6 +48,10 @@ RSpec.describe UnitStat, type: :model do
 
     it "should return correct value with modifiers" do
       expect(with_modifiers.current_value).to eq 7
+    end
+
+    it "should return correct value with modifier for save stat" do
+      expect(save_with_modifier.current_value).to eq 5
     end
   end
 end
